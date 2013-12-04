@@ -7,6 +7,7 @@ import org.opencv.android.JavaCameraView;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
 import android.util.AttributeSet;
@@ -53,7 +54,7 @@ public class Tutorial3View extends JavaCameraView implements PictureCallback {
     public Size getResolution() {
         return mCamera.getParameters().getPreviewSize();
     }
-
+    
     public void takePicture(final String fileName) {
         Log.i(TAG, "Taking picture");
         this.mPictureFileName = fileName;
