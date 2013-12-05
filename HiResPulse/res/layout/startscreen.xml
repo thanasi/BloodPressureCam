@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/StartScreenImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/startscreen" />
+
+    <Button
+        android:id="@+id/StartScreenNextButton"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@id/StartScreenImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/custom_btn_sandrift"
+        android:paddingBottom="5dp"
+        android:text="@string/startbuttonstring" />
+
+</RelativeLayout>

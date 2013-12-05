@@ -1,0 +1,37 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/EndScreenImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/startscreen" />
+
+    <Button
+        android:id="@+id/SaveDataButton"
+        android:layout_width="125dp"
+        android:layout_height="75dp"
+        android:layout_alignBottom="@id/EndScreenImage"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/custom_btn_shakespeare"
+        android:paddingBottom="5dp"
+        android:text="@string/save_data_button" />
+    
+        <Button
+            android:id="@+id/RecaptureButton"
+            android:layout_width="125dp"
+            android:layout_height="75dp"
+            android:layout_alignBottom="@id/EndScreenImage"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/custom_btn_orange"
+            android:paddingBottom="5dp"
+            android:text="@string/remeasure_button" />
+       
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hi Res Pulse Monitor</string>
+    <string name="startbuttonstring">Let\'s get started!</string>
+    <string name="remeasure_button">New Measurement</string>
+    <string name="save_data_button">Save data to file</string>
+</resources>
