@@ -22,10 +22,7 @@ public class MainActivity extends Activity {
         
 		setContentView(R.layout.startscreen);
         
-//		mStartView = (View) findViewById(R.id.StartScreenImage);
         mSSNext = (Button) findViewById(R.id.StartScreenNextButton);
-        
-//        Context context = this;
         
 	 }
 	

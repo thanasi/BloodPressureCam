@@ -1,6 +1,7 @@
 package org.thanasi.hirespulse;
 
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -41,15 +42,15 @@ public class HRPCamActivity extends Activity implements CvCameraViewListener2 {
     
     private Mat mProfile;
     private Mat mProfileVals;
-    private static final int MAXDATA = 150;
+    private static final int MAXDATA = 30;
     private int mPVCounter = MAXDATA;
-    
-    private int mImageHeight = 480;
     
     private float[] mMeanVals;
     private Mat mTempMat;
     private Point mP1,mP2;
     private Scalar mColor;
+    
+    private int[] mDataShape; 
     
     private Chronometer mChrono;
     
@@ -64,16 +65,23 @@ public class HRPCamActivity extends Activity implements CvCameraViewListener2 {
                 {
                     Log.i(TAG, "OpenCV loaded successfully");
                     mOpenCvCameraView.enableView();
-                    mOpenCvCameraView.enableFpsMeter();
-                    mProfile = new Mat(mImageHeight,1,DTYPE);
-                    mProfileVals = new Mat(MAXDATA, mImageHeight, DTYPE);
-                    mTempMat = new Mat();
-                    
+                    mOpenCvCameraView.enableFpsMeter();                    
                     mMeanVals = new float[MAXDATA];
-                    
-                	mP1 = new Point(100,0);
-                	mP2 = new Point(600*mImageHeight/720,mImageHeight);
+                	
+                	Size resolution = mOpenCvCameraView.getResolution();
+                	mDataShape = new int[2];
+                	mDataShape[0] = resolution.height;
+                	mDataShape[1] = MAXDATA;
+                	
+                    mProfile = new Mat(mDataShape[1],1,DTYPE);
+                    mProfileVals = new Mat(mDataShape[0], mDataShape[1], DTYPE);
+                    mTempMat = new Mat();
+                	
+                	mP1 = new Point(mDataShape[1]/7,0);
+                	mP2 = new Point(5*mDataShape[1]/7,mDataShape[1]);
                 	mColor = new Scalar(0,100,0);
+                	
+                	Log.i(TAG, "mDataShape " + Arrays.toString(mDataShape));
                     
                 } break;
                 default:
@@ -112,7 +120,7 @@ public class HRPCamActivity extends Activity implements CvCameraViewListener2 {
         
 //        mProfileVals = new String[MAXDATA];
 
-        mPVCounter = -20;
+        mPVCounter = 0;
         
         mChrono.start();
         
@@ -156,45 +164,42 @@ public class HRPCamActivity extends Activity implements CvCameraViewListener2 {
     	mTempMat = null;
     	
     }
-    
-    // TODO: MAKE ME WORK!
 
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
     	
-    	mTempMat = inputFrame.gray().colRange(100, 600); 
+    	mTempMat = inputFrame.gray().colRange((int) mP1.x, (int) mP2.x); 
     	
     	Core.reduce(mTempMat, mProfile, 1, Core.REDUCE_AVG, DTYPE);
     	
-    	Log.i(TAG+"DUMP", mProfile.col(0).dump());
+//    	Log.i(TAG+"DUMP", mProfile.col(0).dump());
     	
     	if (mPVCounter<MAXDATA){
     		
     		if (mPVCounter > -1) {
-    		for (int i = 0; i<mImageHeight;i++)
+    		for (int i = 0; i<mDataShape[0];i++)
     			mProfileVals.put(mPVCounter, i, mProfile.get(i,0));
     		mMeanVals[mPVCounter] = (float) Core.mean(mTempMat).val[0];
     		}
     		
-    		mPVCounter++;    		
+    		mPVCounter++;
     	}
     	
     	else{
     		mChrono.stop();
     		
-            Intent FinishedIntent = new Intent(getApplicationContext(), FinishedActivity.class);
+            Intent GraphIntent = new Intent(getApplicationContext(), PlotActivity.class);
             
             Log.i(TAG,"Switching to FinishedActivity");
             
-            float [] data = new float[mProfileVals.width() * mProfileVals.height()];
-            mProfileVals.put(0, 0, data);
-            Log.i(TAG,"data " + data.length);
+            float [] data = new float[mProfileVals.height()*mProfileVals.width()];
+            mProfileVals.get(0, 0, data);
             
-//            PlotIntent.putExtra("points", data);
-//            PlotIntent.putExtra("meanData", mMeanVals);
+//            Log.i(TAG,"data " + data.length);
+//            Log.i(TAG,"data " + Arrays.toString(data));
             
-            FinishedIntent.putExtra("points",data);
-//            FinishedIntent.putExtra("data", mProfileVals.dump());
-            startActivity(FinishedIntent);
+            GraphIntent.putExtra("points",data);
+            GraphIntent.putExtra("shape",mDataShape);
+            startActivity(GraphIntent);
         	
             // cleanup data structures
             if (mProfile != null)
@@ -210,7 +215,7 @@ public class HRPCamActivity extends Activity implements CvCameraViewListener2 {
             
 //            Log.i(TAG,"Did I make it here?");
     		
-    		finish();
+    		finish(); // close this activity
     	}
     	
     	mTempMat = inputFrame.rgba();

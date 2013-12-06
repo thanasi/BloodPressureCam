@@ -22,16 +22,16 @@
         android:paddingBottom="5dp"
         android:text="@string/save_data_button" />
     
-        <Button
-            android:id="@+id/RecaptureButton"
-            android:layout_width="125dp"
-            android:layout_height="75dp"
-            android:layout_alignBottom="@id/EndScreenImage"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/custom_btn_orange"
-            android:paddingBottom="5dp"
-            android:text="@string/remeasure_button" />
+    <Button
+        android:id="@+id/RecaptureButton"
+        android:layout_width="125dp"
+        android:layout_height="75dp"
+        android:layout_alignBottom="@id/EndScreenImage"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/custom_btn_orange"
+        android:paddingBottom="5dp"
+        android:text="@string/remeasure_button" />
        
 </RelativeLayout>

@@ -4,4 +4,5 @@
     <string name="startbuttonstring">Let\'s get started!</string>
     <string name="remeasure_button">New Measurement</string>
     <string name="save_data_button">Save data to file</string>
+    <string name="ResetPlotButton">Reset Plot Axes</string>
 </resources>

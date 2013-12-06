@@ -50,7 +50,6 @@ public class FinishedActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 
-		
 
         //Listening to button event
 		mRecap = (Button) findViewById(R.id.RecaptureButton);

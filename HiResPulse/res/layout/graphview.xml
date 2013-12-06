@@ -1,15 +1,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
+    android:layout_height="match_parent"
     android:orientation="vertical" >
- 
-    <com.androidplot.xy.XYPlot
-            android:id="@+id/mySimpleXYPlot"
+
+<com.androidplot.xy.XYPlot
+            android:id="@+id/myPlot"
             android:layout_width="fill_parent"
-            android:layout_height="400dp"
-            androidPlot.title="A Simple XY Plot"
-            androidPlot.domainLabel="Domain"
-            androidPlot.rangeLabel="Range"
+            android:layout_height="200dip"
+            androidPlot.title="ScrollZoom Example"
             androidPlot.titleWidget.labelPaint.textSize="@dimen/title_font_size"
             androidPlot.domainLabelWidget.labelPaint.textSize="@dimen/domain_label_font_size"
             androidPlot.rangeLabelWidget.labelPaint.textSize="@dimen/range_label_font_size"
@@ -24,35 +24,49 @@
             androidPlot.legendWidget.textPaint.textSize="@dimen/legend_text_font_size"
             androidPlot.legendWidget.iconSizeMetrics.heightMetric.value="15dp"
             androidPlot.legendWidget.iconSizeMetrics.widthMetric.value="15dp"
+            androidPlot.legendWidget.widthMetric.value="1"
             androidPlot.legendWidget.heightMetric.value="25dp"
+            androidPlot.legendWidget.positionMetrics.xPositionMetric.value="0"
             androidPlot.legendWidget.positionMetrics.anchor="right_bottom"
-            androidPlot.graphWidget.gridLinePaint.color="#000000"/>
+            android:layout_weight="1"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    android:id="@+id/ButtonLayout">
 
-        <Button
-            android:id="@+id/gsaveButton"
-            android:layout_width="125dp"
-            android:layout_height="75dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/custom_btn_shakespeare"
-            android:text="@string/save_data_button" />
+    <Button
+        android:id="@+id/ResetButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/ResetPlotButton" />
 
-        <Button
-            android:id="@+id/gresetButton"
-            android:layout_width="125dp"
-            android:layout_height="75dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="50dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/custom_btn_orange"
-            android:text="@string/remeasure_button" />
+    <Button
+        android:id="@+id/SaveDataButton"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_alignLeft="@id/ResetButton"
+        android:layout_below="@id/ResetButton"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/custom_btn_shakespeare"
+        android:paddingBottom="5dp"
+        android:text="@string/save_data_button" />
 
-    </RelativeLayout>
+    <Button
+        android:id="@+id/NewDataButton"
+        android:layout_width="125dp"
+        android:layout_height="60dp"
+        android:layout_alignTop="@id/SaveDataButton"
+        android:layout_alignRight="@id/ResetButton"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/custom_btn_orange"
+        android:paddingBottom="5dp"
+        android:text="@string/remeasure_button" />
+
+</RelativeLayout>
 
 </LinearLayout>
-   

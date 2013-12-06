@@ -21,7 +21,7 @@
         
         <activity android:name="HRPCamActivity"   
             	  android:screenOrientation="landscape"></activity>
-        <activity android:name="FinishedActivity"></activity>
+        <activity android:name="PlotActivity"></activity>
     </application>
 
     <supports-screens android:resizeable="true"
