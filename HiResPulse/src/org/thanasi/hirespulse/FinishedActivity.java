@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 //import android.content.Context;
 import android.content.Intent;
@@ -71,7 +72,8 @@ public class FinishedActivity extends Activity {
         
         mSaveData.setOnClickListener(new View.OnClickListener() {
  
-            public void onClick(View arg0) {
+            @SuppressLint("SimpleDateFormat")
+			public void onClick(View arg0) {
                 //Starting a new Intent
             	
             	File dir = android.os.Environment.getExternalStorageDirectory().getAbsoluteFile();

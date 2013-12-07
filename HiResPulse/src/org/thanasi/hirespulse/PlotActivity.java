@@ -3,10 +3,11 @@ package org.thanasi.hirespulse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.lang.Math;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,7 +15,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,10 +39,9 @@ import org.thanasi.hirespulse.R;
 public class PlotActivity extends Activity implements OnTouchListener {
     private static final String TAG = "HiResPulse::PlotActivity";
 	
-	private static final int SERIES_SIZE = 200;
     private XYPlot mySimpleXYPlot;
     private Button resetButton, mSaveDataButton, mNewDataButton;
-    private SimpleXYSeries[] series = null;
+    private SimpleXYSeries [] mSeries = null;
     private PointF minXY;
     private PointF maxXY;
     
@@ -55,6 +54,10 @@ public class PlotActivity extends Activity implements OnTouchListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.graphview);
         
+        //
+        // get data from camera activity
+        //
+        
     	Intent mI = getIntent();
     	Bundle extras = mI.getExtras();
     	
@@ -63,18 +66,23 @@ public class PlotActivity extends Activity implements OnTouchListener {
         
     	mData = new float [mShape[0]][mShape[1]];
     	mNPoints = new Number [mShape[0] * mShape[1]];
+    	
+    	Log.i(TAG, "mShape: " + Arrays.toString(mShape));
+    	
     	int n = 0;
     	for (int i = 0; i<mShape[0]; i++) {
     		for (int j = 0; j<mShape[1]; j++) {
-    			n = i * mShape[0] + j;
     			mData[i][j] = mPoints[n];
     			mNPoints[n] = mPoints[n];
+    			n++;
     		}
     	}
-        
-        
-        
-        
+    	
+    	//
+    	//
+    	// set up buttons
+    	//
+    	//
         
         resetButton = (Button) findViewById(R.id.ResetButton);
     	mSaveDataButton = (Button) findViewById(R.id.SaveDataButton);
@@ -83,8 +91,8 @@ public class PlotActivity extends Activity implements OnTouchListener {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                minXY.x = series[0].getX(0).floatValue();
-                maxXY.x = series[3].getX(series[3].size() - 1).floatValue();
+                minXY.x = mSeries[0].getX(0).floatValue();
+                maxXY.x = mSeries[0].getX(mSeries[0].size() - 1).floatValue();
                 mySimpleXYPlot.setDomainBoundaries(minXY.x, maxXY.x, BoundaryMode.FIXED);
                 mySimpleXYPlot.redraw();
             }
@@ -139,7 +147,12 @@ public class PlotActivity extends Activity implements OnTouchListener {
             }
         });
         
-        
+        //
+        //
+        // Set up plots
+        //
+        //
+                
         mySimpleXYPlot = (XYPlot) findViewById(R.id.myPlot);
         mySimpleXYPlot.setOnTouchListener(this);
         mySimpleXYPlot.getGraphWidget().setTicksPerRangeLabel(2);
@@ -155,22 +168,11 @@ public class PlotActivity extends Activity implements OnTouchListener {
 
         mySimpleXYPlot.setBorderStyle(Plot.BorderStyle.NONE, null, null);
         //mySimpleXYPlot.disableAllMarkup();
-        series = new SimpleXYSeries[4];
-        int scale = 1;
-        for (int i = 0; i < 4; i++, scale *= 5) {
-            series[i] = new SimpleXYSeries("S" + i);
-            populateSeries(series[i], scale);
-        }
-        mySimpleXYPlot.addSeries(series[3],
-                new LineAndPointFormatter(Color.rgb(50, 0, 0), null,
-                        Color.rgb(100, 0, 0), null));
-        mySimpleXYPlot.addSeries(series[2],
-                new LineAndPointFormatter(Color.rgb(50, 50, 0), null,
-                        Color.rgb(100, 100, 0), null));
-        mySimpleXYPlot.addSeries(series[1],
-                new LineAndPointFormatter(Color.rgb(0, 50, 0), null,
-                        Color.rgb(0, 100, 0), null));
-        mySimpleXYPlot.addSeries(series[0],
+        mSeries = new SimpleXYSeries[4];
+        
+        mSeries[0] = new SimpleXYSeries(Arrays.asList(mNPoints), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series1");
+
+        mySimpleXYPlot.addSeries(mSeries[0],
                 new LineAndPointFormatter(Color.rgb(0, 0, 0), null,
                         Color.rgb(0, 0, 150), null));
         mySimpleXYPlot.redraw();
@@ -179,13 +181,6 @@ public class PlotActivity extends Activity implements OnTouchListener {
                 mySimpleXYPlot.getCalculatedMinY().floatValue());
         maxXY = new PointF(mySimpleXYPlot.getCalculatedMaxX().floatValue(),
                 mySimpleXYPlot.getCalculatedMaxY().floatValue());
-    }
-
-    private void populateSeries(SimpleXYSeries series, int max) {
-        Random r = new Random();
-        for(int i = 0; i < SERIES_SIZE; i++) {
-            series.addLast(i, r.nextInt(max));
-        }
     }
 
     // Definition of the touch states
@@ -247,9 +242,9 @@ public class PlotActivity extends Activity implements OnTouchListener {
         minXY.x = domainMidPoint - offset;
         maxXY.x = domainMidPoint + offset;
 
-        minXY.x = Math.min(minXY.x, series[3].getX(series[3].size() - 3)
+        minXY.x = Math.min(minXY.x, mSeries[0].getX(mSeries[0].size() - 3)
                 .floatValue());
-        maxXY.x = Math.max(maxXY.x, series[0].getX(1).floatValue());
+        maxXY.x = Math.max(maxXY.x, mSeries[0].getX(1).floatValue());
         clampToDomainBounds(domainSpan);
     }
 
@@ -263,13 +258,13 @@ public class PlotActivity extends Activity implements OnTouchListener {
     }
 
     private void clampToDomainBounds(float domainSpan) {
-        float leftBoundary = series[0].getX(0).floatValue();
-        float rightBoundary = series[3].getX(series[3].size() - 1).floatValue();
+        float leftBoundary = mSeries[0].getX(0).floatValue();
+        float rightBoundary = mSeries[0].getX(mSeries[0].size() - 1).floatValue();
         // enforce left scroll boundary:
         if (minXY.x < leftBoundary) {
             minXY.x = leftBoundary;
             maxXY.x = leftBoundary + domainSpan;
-        } else if (maxXY.x > series[3].getX(series[3].size() - 1).floatValue()) {
+        } else if (maxXY.x > mSeries[0].getX(mSeries[0].size() - 1).floatValue()) {
             maxXY.x = rightBoundary;
             minXY.x = rightBoundary - domainSpan;
         }
@@ -278,6 +273,6 @@ public class PlotActivity extends Activity implements OnTouchListener {
     private float spacing(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
-        return FloatMath.sqrt(x * x + y * y);
+        return (float) Math.sqrt(x * x + y * y);
     }
 }
